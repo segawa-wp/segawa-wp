@@ -1,0 +1,28 @@
+version: '2.0'
+
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - '80:80'
+        volumes:
+            - ./nginx:/etc/nginx/conf.d
+            - ./logs/nginx:/var/log/nginx
+            - ./wordpress:/var/www/wp
+        links:
+            - wordpress
+
+        restart: always
+
+    wordpress:
+        image: wordpress:php7.2-fpm
+        ports:
+            - '9000:9000'
+        volumes:
+            - ./wordpress:/var/www/wp
+        environment:
+            WORDPRESS_TABLE_PREFIX: wp_
+            WORDPRESS_DB_HOST: wp.cz1h7zohyu92.ap-northeast-1.rds.amazonaws.com
+            WORDPRESS_DB_USER: admin
+            WORDPRESS_DB_PASSWORD: wordpress
+        restart: always
